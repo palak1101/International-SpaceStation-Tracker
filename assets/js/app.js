@@ -1,7 +1,11 @@
+const content = document.querySelector('div.content')
+console.log(content)
+
+
 
 //console.log(L)
 
-var map = L.map('map').setView([0, 0], 1);
+var map = L.map('map').setView([0, 0], 2);
 
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -27,13 +31,24 @@ let marker = L.marker([0, 0], {icon: myIcon}).addTo(map)
 const fetchSpaceStationDetails = async () => {
     const res = await fetch('https://api.wheretheiss.at/v1/satellites/25544')
     const data = await res.json()
-    const {latitude, longitude} = data
-    console.log(latitude, longitude)
+    const {latitude, longitude, velocity} = data
+    //console.log(latitude, longitude, velocity)
 
     marker.setLatLng([latitude, longitude])
 
     //marker to track path
-    L.marker([latitude, longitude], {icon: pathIcon}).addTo(map)     
+    L.marker([latitude, longitude], {icon: pathIcon}).addTo(map) 
+    
+    const template = `
+                        
+                        <div class="iss_data">
+                            <p>Latitude: ${latitude.toFixed(4) + "&deg" }</p>
+                            <p>Longitude: ${longitude.toFixed(4) + "&deg" }</p>
+                            <p>Velocity: ${velocity.toFixed(0) + " Km/hr "}</p> 
+                        </div>
+                    `
+        
+        content.innerHTML = template
 }
 
 // To see live location -> call function after 1 sec
@@ -41,3 +56,5 @@ const fetchSpaceStationDetails = async () => {
 
 //A function which calls particular function after set interval, here to give live location-
 setInterval(fetchSpaceStationDetails, 1000)
+
+
