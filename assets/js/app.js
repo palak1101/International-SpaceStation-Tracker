@@ -52,7 +52,7 @@ const fetchSpaceStationDetails = async () => {
 }
 
 // To see live location -> call function after 1 sec
-//fetchSpaceStationDetails()
+fetchSpaceStationDetails()
 
 //A function which calls particular function after set interval, here to give live location-
 setInterval(fetchSpaceStationDetails, 1000)
